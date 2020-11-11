@@ -6,6 +6,8 @@ import discord
 from discord.ext import commands
 from loguru import logger
 
+#from .db import DataBase
+
 
 #Завантаження запису логів
 logger.add("data/log/debug.log", format="{time} {level} {message}",

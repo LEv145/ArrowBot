@@ -3,3 +3,4 @@ __pycache__
 *.log
 
 lib/bot/token
+lib/bot/config.json
