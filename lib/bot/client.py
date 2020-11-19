@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from loguru import logger
 
-#from .db import DataBase
+from .import db
 
 
 #Завантаження запису логів
@@ -59,6 +59,9 @@ class WorkerBot(commands.Bot):
         """Функція яка відповідає за запуск бота"""
         logger.debug("Завантаження когів")
         self.load_cog()
+        
+        logger.debug("Підключення до таблиці бази данних")
+        db.build()
 
         logger.debug("Завантаження токена")
         with open('lib/bot/token', 'r', encoding='utf-8') as f:
@@ -85,5 +88,10 @@ class WorkerBot(commands.Bot):
         logger.debug("Бот знаходиться на {guild} серверах", guild=len(guilds))
         logger.debug("Обробляю {member} користувачів", member=members)
         logger.debug("=====================================")
+
+
+    async def on_guild_join(self, guild):
+        """Функція яка викликається при вході бота на новий сервер"""
+        logger.debug("Я був добавлений на новий сервер: {server}", server=guild.name)
 
 bot = WorkerBot()
