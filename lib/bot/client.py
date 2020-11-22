@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from loguru import logger
 
-from .import db
+from . import db
 
 
 #Завантаження запису логів
@@ -14,7 +14,7 @@ logger.add("data/log/debug.log", format="{time} {level} {message}",
 level="DEBUG", rotation="10 MB", compression="zip")
 
 #Завантаження конфіга
-with open('data/config.json', 'r') as f:
+with open("data/config.json", "r", encoding="utf-8") as f:
 	cfg = json.load(f)
 
 #Список ID розробників бота
@@ -24,7 +24,7 @@ OWNER_IDS = [
 
 #Список всіх когів
 COGS_LIST = [
-    "lib.cogs.moderation"
+    "lib.cogs.event",
 ]
 
 #Інформація про бота
@@ -32,8 +32,10 @@ BOT_DESC = "ArrowBot by Videf"
 
 def get_prefix(bot, message):
     """Функція яка відповідає за префікс"""
-    prefix = "!"
-    return commands.when_mentioned_or(prefix)(bot, message)
+    db.cursor.execute(f"SELECT Prefix FROM guilds WHERE GuildID = {message.guild.id}")
+    prefix = db.cursor.fetchone()
+
+    return prefix
 
 class WorkerBot(commands.Bot):
     """Клас який відповідає за роботу бота"""
@@ -73,7 +75,6 @@ class WorkerBot(commands.Bot):
 
     async def on_ready(self):
         """Функція яка викликається при готовності бота"""
-        VERSION = cfg["BOT"]["VERSION"]
         guilds = await self.fetch_guilds(limit=None).flatten()
         members = len(set(self.get_all_members()))
 
@@ -84,14 +85,9 @@ class WorkerBot(commands.Bot):
 
         #Вивод інформації про бота в консоль
         logger.debug("{name} запустився", name=self.user.name)
-        logger.debug("Версія бота: {version}", version=VERSION)
+        logger.debug("Версія бота: {version}", version=cfg["BOT"]["VERSION"])
         logger.debug("Бот знаходиться на {guild} серверах", guild=len(guilds))
         logger.debug("Обробляю {member} користувачів", member=members)
         logger.debug("=====================================")
-
-
-    async def on_guild_join(self, guild):
-        """Функція яка викликається при вході бота на новий сервер"""
-        logger.debug("Я був добавлений на новий сервер: {server}", server=guild.name)
 
 bot = WorkerBot()

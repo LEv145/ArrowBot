@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS guilds (
-    GuildID integer PRIMARY KEY,
-    Prefix text DEFAULT '!',
-    LangBot text,
-    LangCom text,
-    EmbedColor text
+    GuildID BIGINT PRIMARY KEY,
+    Prefix VARCHAR(5) DEFAULT '!',
+    LangBot VARCHAR(25),
+    LangCom VARCHAR(25),
+    EmbedColor VARCHAR(12)
 );

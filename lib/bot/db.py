@@ -11,7 +11,7 @@ import psycopg2
 BUILD_PACH = "data/db/build.sql"
 
 #Завантаження конфіга
-with open("lib/bot/config.json", "r") as f:
+with open("lib/bot/private_config.json", "r") as f:
 	cfg = json.load(f)
 
 #Завантаження бази данних
@@ -45,7 +45,7 @@ def load_script(pach):
 
 def exit_conn():
     """Функція яка вимикає підключення до бази данних, під час вимкнення бота"""
-    if(conn):
+    if (conn):
         cursor.close()
         conn.close()
         logger.info("Підключення до PostgreSQL вимкнено")

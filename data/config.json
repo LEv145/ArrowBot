@@ -1,8 +1,9 @@
 {
     "BOT": {
-        "VERSION": "0.0"
+        "VERSION": "0.0",
+        "AUTHOR": "Videf#6174"
     },
-    "EMB": {
-        "BASIC_COLOR": "0x108318"
+    "EMBED": {
+        "DEFAULT_COLOR": "0xeb5b0e"
     }
 }
