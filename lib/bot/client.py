@@ -7,11 +7,8 @@ from discord.ext import commands
 from loguru import logger
 
 from . import db
+from . import utils
 
-
-#Завантаження запису логів
-logger.add("data/log/debug.log", format="{time} {level} {message}",
-level="DEBUG", rotation="10 MB", compression="zip")
 
 #Завантаження конфіга
 with open("data/config.json", "r", encoding="utf-8") as f:
@@ -40,7 +37,6 @@ def get_prefix(bot, message):
 class WorkerBot(commands.Bot):
     """Клас який відповідає за роботу бота"""
     def __init__(self):
-        logger.debug("=====================================")
         logger.debug("Завантаження головних параметрів")
         super().__init__(command_prefix=get_prefix,
                     intents=discord.Intents.all(),
@@ -66,12 +62,12 @@ class WorkerBot(commands.Bot):
         db.build()
 
         logger.debug("Завантаження токена")
-        with open('lib/bot/token', 'r', encoding='utf-8') as f:
-            self.BOT_TOKEN = f.read()
+        with open("lib/bot/private_config.json", "r", encoding="utf-8") as f:
+            self.BOT_TOKEN = json.load(f)
 
         logger.debug("Підключення токена")
         logger.debug("==========================================")
-        super().run(self.BOT_TOKEN, reconnect=True)
+        super().run(self.BOT_TOKEN["BOT"]["TOKEN"], reconnect=True)
 
     async def on_ready(self):
         """Функція яка викликається при готовності бота"""
@@ -88,6 +84,6 @@ class WorkerBot(commands.Bot):
         logger.debug("Версія бота: {version}", version=cfg["BOT"]["VERSION"])
         logger.debug("Бот знаходиться на {guild} серверах", guild=len(guilds))
         logger.debug("Обробляю {member} користувачів", member=members)
-        logger.debug("=====================================")
+        logger.debug("==========================================")
 
 bot = WorkerBot()

@@ -2,5 +2,4 @@ __pycache__
 
 *.log
 
-lib/bot/token
 lib/bot/private_config.json

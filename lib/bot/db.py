@@ -7,6 +7,8 @@ import atexit
 from loguru import logger
 import psycopg2
 
+from . import utils
+
 
 BUILD_PACH = "data/db/build.sql"
 
@@ -49,5 +51,6 @@ def exit_conn():
         cursor.close()
         conn.close()
         logger.info("Підключення до PostgreSQL вимкнено")
+        logger.debug("==========================================")
 
 atexit.register(exit_conn)
